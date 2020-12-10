@@ -6,6 +6,7 @@ Feature: About us
 
   Scenario: Management team is shown in about us section
     When I navigate to "About us" page
+    And I scroll down
     Then I see the management team is composed by:
       | name            |
       | Ricardo Moral   |

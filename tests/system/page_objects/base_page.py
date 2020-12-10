@@ -2,6 +2,8 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
+from time import sleep
+
 TRANSLATE_TO_UPPER = "translate(., 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')"
 
 
@@ -69,3 +71,8 @@ class BasePage:
 
     def wait_until_url_contains(self, url, wait_time=30):
         WebDriverWait(self.driver, wait_time).until(EC.url_contains(url))
+
+    def scroll_down(self):
+        self.driver.execute_script("window.scrollBy(0,800)")
+        # This sleep is not necessary, it is added for the presentation
+        sleep(3)

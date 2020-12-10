@@ -18,3 +18,8 @@ def navigate_to_section(context, section):
     home_page = context.current_page
     section_page = home_page.go_to_section(section)
     context.current_page = section_page
+
+
+@step('I scroll down')
+def scroll_down(context):
+    context.current_page.scroll_down()
