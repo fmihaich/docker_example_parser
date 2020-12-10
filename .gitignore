@@ -4,3 +4,4 @@
 .pydevproject
 __pycache__
 tests/system/output/*
+tests/system/html_report_generator/*
