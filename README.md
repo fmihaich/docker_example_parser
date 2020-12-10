@@ -1,1 +1,3 @@
-# docker_example_parser
+# Example of docker solution for web automation
+
+Based on testing Parser web page
