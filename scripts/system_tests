@@ -1,0 +1,42 @@
+#!/bin/bash
+
+DEFAULT_BROWSER=chrome
+
+while [[ $# -gt 0 ]]
+do
+    key="$1"
+    case $key in
+        -b|--browser)
+            BROWSER=$2
+            shift
+            ;;
+        *)
+            # unknown option
+            ;;
+    esac
+    shift
+done
+
+
+if [[ -z $BROWSER ]]
+then
+    BROWSER=$DEFAULT_BROWSER
+fi
+
+
+echo "Stopping & starting docker container"
+docker-compose -f system_tests.yml down
+docker-compose -f system_tests.yml up -d
+
+sleep 3
+
+docker-compose -f system_tests.yml ps
+
+echo "RUNNING SYSTEM TESTS"
+echo "Running UI tests using browser: $BROWSER"
+docker-compose -f system_tests.yml exec -T -e BROWSER=$BROWSER test_runner tests/system/run
+
+echo ""
+echo "Stopping container"
+docker-compose -f system_tests.yml down
+

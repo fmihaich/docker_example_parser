@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# Install test requirements
+pip3 install -r tests/system/requirements.txt
+
+# Run system tests
+find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf
+[ -e tests/system/output/results.json ] && rm tests/system/output/results.json
+
+behave -s tests/system/features --no-logcapture -f json -o tests/system/output/results.json "$@"
+
+if [[ $? = 0 ]]; then
+    echo ""
+    echo "#################################"
+    echo "###### SYSTEM TESTS PASSED ######"
+    echo "#################################"
+    echo ""
+    TEST_PASSED=1
+else
+    echo ""
+    echo "#################################"
+    echo "###### SYSTEM TESTS FAILED ######"
+    echo "#################################"
+    echo ""
+fi
+
+# Generate Reports
+sleep 2
+cp tests/system/output/results.json tests/system/output/$BROWSER/results.json
+python3 -m behave2cucumber -i tests/system/output/$BROWSER/results.json -o tests/system/output/$BROWSER/results_cucumber.json
+
+# Run html report generator
+REPORT_GENERATOR_DIR=tests/system/html_report_generator
+HOME_DIR=${PWD}
+
+cd $REPORT_GENERATOR_DIR
+
+npm install
+./run -i ../output/$BROWSER/results_cucumber.json -o ../output/$BROWSER/results.html -b $BROWSER
+
+cd $HOME_DIR
+
+echo ""
+echo "See output results in: tests/system/output/$BROWSER"
+echo "Check html summary in: tests/system/output/$BROWSER/results.html"
+echo ""
+
+
+if [[ -z $TEST_PASSED ]]
+then
+    exit 1
+fi

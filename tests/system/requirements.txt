@@ -1,0 +1,5 @@
+behave==1.2.6
+behave2cucumber==1.0.3
+configobj==5.0.6
+PyHamcrest==2.0.2
+selenium==3.141.0
