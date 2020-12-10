@@ -1,0 +1,69 @@
+#!/bin/bash
+echo "############ HTML REPORT GENERATOR ############"
+
+echo ""
+echo "This script will:"
+echo "# Update cucumber report to add images to scenarios"
+echo "# Generate the htlm report using node"
+
+
+DEFAULT_BROWSER=chrome
+DEFAULT_CUCUMBER_FILE=results_cucumber.json
+DEFAULT_OUTPUT_FILE=results.html
+
+
+while [[ $# -gt 0 ]]
+do
+    key="$1"
+    case $key in
+        -i|--inputFile)
+            CUCUMBER_FILE=$2
+            shift
+            ;;
+        -o|--outputFile)
+            OUTPUT_FILE=$2
+            shift
+            ;;
+        -b|--browser)
+            BROWSER=$2
+            shift
+            ;;
+        *)
+            # unknown option
+            ;;
+    esac
+    shift
+done
+
+
+
+if [[ -z $CUCUMBER_FILE ]]
+then
+    CUCUMBER_FILE=$DEFAULT_CUCUMBER_FILE
+fi
+
+
+if [[ -z $OUTPUT_FILE ]]
+then
+    OUTPUT_FILE=$DEFAULT_OUTPUT_FILE
+fi
+
+
+if [[ -z $BROWSER ]]
+then
+    BROWSER=$DEFAULT_BROWSER
+fi
+
+echo ""
+echo "Cucumber file (input): $CUCUMBER_FILE"
+echo "Result file (output): $OUTPUT_FILE"
+echo "Browser folder: $BROWSER"
+echo ""
+
+
+DIRECTORY=`dirname $0`
+python3 $DIRECTORY/update_cucumber_report.py -b $BROWSER -i $CUCUMBER_FILE -o $CUCUMBER_FILE
+
+node $DIRECTORY/index.js --inputFile $CUCUMBER_FILE --outputFile $OUTPUT_FILE --browser $BROWSER
+
+echo "#######################################"

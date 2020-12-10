@@ -3,5 +3,5 @@
 .project
 .pydevproject
 __pycache__
-tests/system/output/*
-tests/system/html_report_generator/*
+tests/system/output
+tests/system/html_report_generator/node_modules
