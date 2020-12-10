@@ -1,0 +1,6 @@
+.idea/
+.cache
+.project
+.pydevproject
+__pycache__
+tests/system/output/*
